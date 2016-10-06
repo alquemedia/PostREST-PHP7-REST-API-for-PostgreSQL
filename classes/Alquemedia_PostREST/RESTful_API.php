@@ -16,6 +16,9 @@ class RESTful_API {
      */
     private $config;
 
+    /**
+     * @var \PDO
+     */
     private $db;
 
     /**
@@ -77,11 +80,18 @@ class RESTful_API {
         // No specific model?
         if ( ! $this->uriPart(3))
 
-            $this->getModels( $modelName );
+            $this->result['models'] = $this->getModels( $modelName );
     }
 
+    /**
+     * @param $modelName
+     * @return array
+     */
     private function getModels( $modelName ){
 
+        $result = $this->db->query("SELECT * FROM $modelName WHERE TRUE");
+
+        return $result->fetchAll( \PDO::FETCH_ASSOC );
 
     }
 
@@ -98,15 +108,15 @@ class RESTful_API {
     }
 
     /**
-     * @return JSON_File|null
+     * @return \PDO
      */
     private function connect(){
 
         $dbConfig = $this->loadJSON('database');
 
-        $this->db = new \PDO();
+        $db = new \PDO((string) new Data_Source_Name($dbConfig),$dbConfig->username,$dbConfig->password);
 
-        return $dbConfig;
+        return $db;
 
     }
 

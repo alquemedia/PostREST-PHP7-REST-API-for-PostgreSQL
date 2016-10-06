@@ -55,4 +55,14 @@ class JSON_File {
 
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function __get($name) {
+
+        return $this->get( $name );
+
+    }
+
 }

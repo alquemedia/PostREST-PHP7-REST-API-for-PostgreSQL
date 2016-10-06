@@ -9,14 +9,17 @@
 namespace Alquemedia_PostREST;
 
 
-class Root {
+/**
+ * Class Root
+ * @package Alquemedia_PostREST
+ *
+ * Root of Application
+ */
+class Root extends String_Object{
 
-    /**
-     * @return string Root
-     */
-    public function __toString() {
+    public function __construct() {
 
-        return $_SERVER['DOCUMENT_ROOT'];
+        $this->stringRepresentation = $_SERVER['DOCUMENT_ROOT'];
 
     }
 }
