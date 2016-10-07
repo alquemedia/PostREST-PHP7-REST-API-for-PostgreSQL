@@ -1,16 +1,14 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: dgreenberg
- * Date: 10/5/16
- * Time: 8:22 PM
- */
-
-namespace Alquemedia_PostREST;
-
-
+<?php namespace Alquemedia_PostREST;
+use Alquemedia_PostREST\Components\Database\Database;
+use Alquemedia_PostREST\Components\Models\Model;
 use Alquemedia_PostREST\Components\SQL\Select_Statement;
 
+/**
+ * Class RESTful_API
+ * @package Alquemedia_PostREST
+ *
+ * A RESTful API
+ */
 class RESTful_API {
 
     /**
@@ -79,10 +77,16 @@ class RESTful_API {
 
             $this->setError("Expected a model name in the URL");
 
-        // No specific model?
-        if ( ! $this->uriPart(3))
+        $recordId = $this->uriPart(3);
+
+        if ( !$recordId)
 
             $this->result['models'] = $this->getModels( $modelName );
+
+        else
+
+            $this->result[ $modelName ] = (new Model($modelName,$recordId))->asArray();
+
     }
 
     /**
@@ -91,7 +95,7 @@ class RESTful_API {
      */
     private function getModels( $modelName ){
 
-        $result = $this->db->query( (string) new Select_Statement($modelName) );
+        $result = (new Database())->query((string) new Select_Statement($modelName) );
 
         return $result->fetchAll( \PDO::FETCH_ASSOC );
 
@@ -102,11 +106,13 @@ class RESTful_API {
      */
     private function metaData(){
 
-        return [
+        $metaData = [ 'api-root' => $this->config->get('api-root'),];
 
-            'api-root' => $this->config->get('api-root'),
+        if ( $this->config->get('show-server-vars'))
 
-        ];
+            $metaData['server-vars'] = $_SERVER;
+
+        return $metaData;
     }
 
     /**

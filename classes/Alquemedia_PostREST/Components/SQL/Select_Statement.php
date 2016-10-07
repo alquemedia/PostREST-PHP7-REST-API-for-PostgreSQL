@@ -21,12 +21,16 @@ class Select_Statement extends String_Object{
 
     /**
      * Select_Statement constructor.
-     * @param string $modelName
+     * @param $modelName
+     * @param int $recordId
      */
-    public function __construct( $modelName ) {
+    public function __construct( $modelName, $recordId = 0 ) {
 
-        $this->stringRepresentation = "SELECT * FROM $modelName WHERE TRUE LIMIT ". (new SQL_Settings())
+        $whereClause = (string) new WHERE_Clause($modelName,$recordId);
+
+        $this->stringRepresentation = "SELECT * FROM $modelName WHERE $whereClause LIMIT ". (new SQL_Settings())
 
             ->selectLimit();
+
     }
 }

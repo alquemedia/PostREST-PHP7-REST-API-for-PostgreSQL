@@ -1,5 +1,6 @@
 {
   "api-root": "rest",
+  "show-server-vars": true,
   "sql-settings":{
     "select_limit": 10
   }
