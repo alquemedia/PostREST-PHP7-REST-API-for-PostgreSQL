@@ -9,6 +9,8 @@
 namespace Alquemedia_PostREST;
 
 
+use Alquemedia_PostREST\Components\SQL\Select_Statement;
+
 class RESTful_API {
 
     /**
@@ -89,7 +91,7 @@ class RESTful_API {
      */
     private function getModels( $modelName ){
 
-        $result = $this->db->query("SELECT * FROM $modelName WHERE TRUE");
+        $result = $this->db->query( (string) new Select_Statement($modelName) );
 
         return $result->fetchAll( \PDO::FETCH_ASSOC );
 

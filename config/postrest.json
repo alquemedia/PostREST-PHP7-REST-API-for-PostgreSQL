@@ -1,3 +1,6 @@
 {
-  "api-root": "rest"
+  "api-root": "rest",
+  "sql-settings":{
+    "select_limit": 10
+  }
 }
