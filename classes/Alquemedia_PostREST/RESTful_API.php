@@ -62,9 +62,13 @@ class RESTful_API {
 
             $this->setError("Expected API root /$apiRoot, but got $uriPart1");
 
-        $this->processModel( $this->uriPart(2) );
+        else {
 
-        $this->result['metaData'] = $this->metaData();
+            $this->processModel( $this->uriPart(2) );
+
+            $this->result['metaData'] = $this->metaData();
+
+        }
 
     }
 
@@ -73,9 +77,13 @@ class RESTful_API {
      */
     private function processModel( $modelName ){
 
-        if ( ! $modelName )
+        if ( ! $modelName ){
 
             $this->setError("Expected a model name in the URL");
+
+            return;
+        }
+
 
         $recordId = $this->uriPart(3);
 
@@ -97,7 +105,11 @@ class RESTful_API {
 
         $result = (new Database())->query((string) new Select_Statement($modelName) );
 
-        return $result->fetchAll( \PDO::FETCH_ASSOC );
+        if ( ! $result )
+
+            $this->setError("$modelName: No such Model found");
+
+        return $result ? $result->fetchAll( \PDO::FETCH_ASSOC ):[];
 
     }
 
